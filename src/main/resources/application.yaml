@@ -1,0 +1,18 @@
+spring:
+  liquibase:
+    enabled: false
+  datasource:
+    driverClassName: org.firebirdsql.jdbc.FBDriver
+    url: jdbc:firebirdsql:10.1.1.150:C:/VETOR/ronalds/ronalds.fdb?sql_dialect=3&charSet=utf-8&encoding=NONE
+    #url: jdbc:firebirdsql:127.0.0.1:C:/fix/ronalds/ronalds.fdb?sql_dialect=3&charSet=utf-8&encoding=NONE
+    username: SYSDBA
+    password: masterkey
+
+  jpa:
+    database-platform: org.hibernate.community.dialect.FirebirdDialect
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+
