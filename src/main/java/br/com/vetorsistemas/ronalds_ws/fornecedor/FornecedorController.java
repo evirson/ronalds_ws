@@ -26,12 +26,11 @@ public class FornecedorController {
             @RequestParam(value = "nomeFantasia", required = false) String nomeFantasia,
             @RequestParam(value = "cnpj", required = false) String cnpj,
             @RequestParam(value = "telefone", required = false) String telefone,
-            @PageableDefault(size = 20)
-            @SortDefault.SortDefaults({
-                    @SortDefault(sort = "razaoSocial")
-            }) Pageable pageable
+            @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
+            @RequestParam(value = "tamanho-pagina", defaultValue = "10") Integer tamanhoPagina
     ) {
-        return ResponseEntity.ok(service.search(razaoSocial, nomeFantasia, cnpj, telefone, pageable));
+        return ResponseEntity.ok(service.search(razaoSocial, nomeFantasia,
+                cnpj, telefone, pagina, tamanhoPagina));
     }
 
     @GetMapping("/{id}")

@@ -15,6 +15,7 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @PostMapping("/login")
+    @CrossOrigin
     public ResponseEntity<UsuarioDTO> login(@Valid @RequestBody LoginRequestDTO body) {
         return ResponseEntity.ok(usuarioService.login(body));
     }
