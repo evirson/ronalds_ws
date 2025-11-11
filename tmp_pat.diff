@@ -1,0 +1,59 @@
+*** Begin Patch
+*** Update File: src/main/java/br/com/vetorsistemas/ronalds_ws/contasPagar/mapper/ContasPagarMapper.java
+@@
+-package br.com.vetorsistemas.ronalds_ws.contasPagar.mapper;
+-
+-import br.com.vetorsistemas.ronalds_ws.contasPagar.ContasPagar;
+-import br.com.vetorsistemas.ronalds_ws.contasPagar.dto.ContasPagarDto;
+-import com.fasterxml.jackson.annotation.JsonFormat;
+-import lombok.AllArgsConstructor;
+-import lombok.Builder;
+-import lombok.Data;
+-import lombok.NoArgsConstructor;
+-
+-import java.time.LocalDateTime;
+-
+-@AllArgsConstructor
+-@NoArgsConstructor
+-@Data
+-@Builder
+-public class ContasPagarMapper {
++package br.com.vetorsistemas.ronalds_ws.contasPagar.mapper;
++
++import br.com.vetorsistemas.ronalds_ws.contasPagar.ContasPagar;
++import br.com.vetorsistemas.ronalds_ws.contasPagar.dto.ContasPagarDto;
++import org.springframework.stereotype.Component;
++
++@Component
++public class ContasPagarMapper {
+@@
+-    public ContasPagarDto toDto(ContasPagar ent) {
++    public ContasPagarDto toDto(ContasPagar ent) {
+@@
+-    }
+-
+-}
++    }
++
++    public void updateEntityFromDTO(ContasPagarDto dto, ContasPagar ent) {
++        if (dto == null || ent == null) return;
++
++        ent.setCodigoPedido(dto.getCodigoPedido());
++        ent.setDataMovimento(dto.getDataMovimento());
++        ent.setPlanoContas(dto.getPlanoContas());
++        ent.setIdFornecedor(dto.getIdFornecedor());
++        ent.setDocumento(dto.getDocumento());
++        ent.setComDuplicata(dto.getComDuplicata());
++        ent.setDataVencimento(dto.getDataVencimento());
++        ent.setPercentualMulta(dto.getPercentualMulta());
++        ent.setPercentualJuros(dto.getPercentualJuros());
++        ent.setValorVencimento(dto.getValorVencimento());
++        ent.setDescontoVencimento(dto.getDescontoVencimento());
++        ent.setValidadeDesconto(dto.getValidadeDesconto());
++        ent.setValorPago(dto.getValorPago());
++        ent.setObservacoes(dto.getObservacoes());
++        ent.setDataPagamento(dto.getDataPagamento());
++        ent.setDescricao(dto.getDescricao());
++    }
++}
+*** End Patch

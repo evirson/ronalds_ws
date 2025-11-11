@@ -31,16 +31,31 @@
 	</properties>
 	<dependencies>
 
+		<!-- Email -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
+
 		<dependency>
 			<groupId>org.hibernate.orm</groupId>
 			<artifactId>hibernate-community-dialects</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.firebirdsql.jdbc/jaybird -->
+<!--		<dependency>-->
+<!--			<groupId>org.firebirdsql.jdbc</groupId>-->
+<!--			<artifactId>jaybird</artifactId>-->
+<!--			<version>6.0.3</version>-->
+<!--		</dependency>-->
+
+		<!-- https://mvnrepository.com/artifact/org.firebirdsql.jdbc/jaybird -->
 		<dependency>
 			<groupId>org.firebirdsql.jdbc</groupId>
-			<artifactId>jaybird-native</artifactId>
-			<version>6.0.0</version>
+			<artifactId>jaybird</artifactId>
+			<version>5.0.10.java11</version>
 		</dependency>
+
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -53,6 +68,29 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
+		<!-- Security + JWT -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-api</artifactId>
+			<version>0.11.5</version>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<version>0.11.5</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<dependency>
