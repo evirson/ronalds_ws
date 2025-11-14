@@ -5,6 +5,10 @@ import br.com.vetorsistemas.ronalds_ws.cadastro.cliente.dto.ClienteCreateUpdateD
 import br.com.vetorsistemas.ronalds_ws.cadastro.cliente.dto.ClienteDTO;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 @Component
 public class ClienteMapper {
 
@@ -55,12 +59,13 @@ public class ClienteMapper {
 
     public Cliente fromCreateUpdateDTO(ClienteCreateUpdateDTO d) {
         if (d == null) return null;
+
         return Cliente.builder()
                 .id(d.getId())
                 .sexo(d.getSexo())
-                .dataFundacaoOuNascimento(d.getDataFundacaoOuNascimento())
-                .clienteDesde(d.getClienteDesde())
-                .dataCadastro(d.getDataCadastro())
+                .dataFundacaoOuNascimento(d.getDataFundacaoOuNascimento().atStartOfDay())
+                .clienteDesde(d.getClienteDesde().atStartOfDay())
+                .dataCadastro(d.getDataCadastro().atTime(LocalTime.now()))
                 .nomeFantasia(d.getNomeFantasia())
                 .inscricaoEstadualDocumento(d.getInscricaoEstadualDocumento())
                 .cnpjCpf(d.getCnpjCpf())
@@ -94,16 +99,16 @@ public class ClienteMapper {
                 .csllServico(d.getCsllServico())
                 .irpjServico(d.getIrpjServico())
                 .pisServico(d.getPisServico())
-                .dataNascimento(d.getDataNascimento())
+                .dataNascimento(d.getDataNascimento().atStartOfDay())
                 .build();
     }
 
     public void updateEntityFromDTO(ClienteCreateUpdateDTO d, Cliente e) {
         if (d == null || e == null) return;
         e.setSexo(d.getSexo());
-        e.setDataFundacaoOuNascimento(d.getDataFundacaoOuNascimento());
-        e.setClienteDesde(d.getClienteDesde());
-        e.setDataCadastro(d.getDataCadastro());
+        e.setDataFundacaoOuNascimento(d.getDataFundacaoOuNascimento().atStartOfDay());
+        e.setClienteDesde(d.getClienteDesde().atStartOfDay());
+        e.setDataCadastro(d.getDataCadastro().atTime(LocalTime.now()));
         e.setNomeFantasia(d.getNomeFantasia());
         e.setInscricaoEstadualDocumento(d.getInscricaoEstadualDocumento());
         e.setCnpjCpf(d.getCnpjCpf());
@@ -137,6 +142,6 @@ public class ClienteMapper {
         e.setCsllServico(d.getCsllServico());
         e.setIrpjServico(d.getIrpjServico());
         e.setPisServico(d.getPisServico());
-        e.setDataNascimento(d.getDataNascimento());
+        e.setDataNascimento(d.getDataNascimento().atStartOfDay());
     }
 }

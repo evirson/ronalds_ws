@@ -1,0 +1,21 @@
+
+CRUD
+
+tabela itens da ordem de serviço
+TABLE SRVITN (
+    CODITN  INTEGER NOT NULL, //codigo id
+    CODSRV  INTEGER NOT NULL,  //codigo da ordem de serviço vem da tabela CADSRV
+    CODPRO  INTEGER NOT NULL,  //codigo do Produto ou Serviço vem da tabela CADPRO
+    TIPPRO  CHAR(1) NOT NULL,  //1-Produto Original 2-Serviço 3-Terceiros 4-Geometria 5- Lubrificantes 6-Produtos Paralelos 7-Peça sem Referência
+    DESPRO  CHAR(50) NOT NULL, //descrição do produto é alterado quando definidos o tipo 2 e 4 caso contrario traz descrição do cadastro de produtos
+    QTDPRO  FLOAT DEFAULT 0,  //quantidade de produto ou serviço
+    PREUNI  FLOAT,  //valor unitário
+    PERDES  FLOAT,  //desconto percentual total
+    VALDES  FLOAT,  //valor do desconto total
+    VALLIQ  FLOAT,  //valor liquido (preuni * qtdpro) - valdes
+    VALBRU  FLOAT,  //valor bruto (preuni * qtdpro)
+    CODCFO  INTEGER DEFAULT 0  //código fiscal de operação
+);
+
+Não apagar ordem de serviço caso Faturada
+Quando apagar ordem de serviço, apagar essa tabela também

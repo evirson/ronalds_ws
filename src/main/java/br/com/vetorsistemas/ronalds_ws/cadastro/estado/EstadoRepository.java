@@ -1,0 +1,7 @@
+package br.com.vetorsistemas.ronalds_ws.cadastro.estado;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+
+public interface EstadoRepository extends JpaRepository<Estado, Integer>, JpaSpecificationExecutor<Estado> {
+}

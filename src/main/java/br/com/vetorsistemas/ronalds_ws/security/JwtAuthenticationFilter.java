@@ -4,15 +4,26 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.lang.NonNull;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+/**
+ * Filtro que intercepta todas as requisições para validar e processar o token JWT
+ */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    private static final String BEARER_PREFIX = "Bearer ";
 
     private final JwtTokenService jwtTokenService;
 
@@ -21,16 +32,43 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String header = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7);
-            if (jwtTokenService.validate(token)) {
-                var auth = jwtTokenService.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(auth);
+    protected void doFilterInternal(
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain) throws ServletException, IOException {
+
+        try {
+            String token = extractTokenFromRequest(request);
+
+            if (token != null && jwtTokenService.validateToken(token)) {
+                Authentication authentication = jwtTokenService.getAuthentication(token);
+
+                if (authentication != null) {
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    log.debug("Usuario autenticado: {}", authentication.getName());
+                }
+            } else if (token != null) {
+                log.debug("Token invalido ou expirado para o endpoint: {}", request.getRequestURI());
             }
+        } catch (Exception e) {
+            log.error("Erro ao processar autenticacao JWT", e);
+            // Limpa o contexto em caso de erro
+            SecurityContextHolder.clearContext();
         }
+
         filterChain.doFilter(request, response);
     }
-}
 
+    /**
+     * Extrai o token JWT do header Authorization
+     */
+    private String extractTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) {
+            return bearerToken.substring(BEARER_PREFIX.length());
+        }
+
+        return null;
+    }
+}

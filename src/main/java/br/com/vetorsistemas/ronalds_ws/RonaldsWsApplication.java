@@ -11,7 +11,7 @@ public class RonaldsWsApplication {
 		SpringApplication.run(RonaldsWsApplication.class, args);
 
 
-//		System.out.println(new BCryptPasswordEncoder().encode("12345678") );
+		System.out.println(new BCryptPasswordEncoder().encode("12345678") );
 	}
 
 

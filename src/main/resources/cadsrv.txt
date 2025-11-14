@@ -1,0 +1,49 @@
+vamor criar endpoints CRUD para essa tabela utilizando a nomenclatura que descrevei ao lado de cada campo
+o GET deve ter filter Código de O.S, Veiculo por Placa, periodo inicial e final de DATEMI , Funcionário, Cliente, Nota Fiscal Serviço, Nota Fiscal Produtos
+body de retorno deve ter Nome de Funcionário CADFUN, nome de Cliente CLIBAS, Veículo com Placa, Modelo, tipo de Carro
+e os demais campos da tabela
+
+//tabela ordem de serviço
+CREATE TABLE CADSRV (
+    CODSRV     INTEGER NOT NULL,  //codigo id
+    TIPSRV     CHAR(1) NOT NULL,  //tipo de serviço  1 - Orçamento 2 - Execução
+    DATEMI     TIMESTAMP NOT NULL, //data abertura da ordem
+    HOREMI     TIMESTAMP NOT NULL,  //hora abertura da ordem - mesmo dado DATEMI
+    RESPON     CHAR(25),  //responsável pela abertura - buscar em CADFUN e deixa NOMFUN nome do Funcionário aqui
+    CODFUN     INTEGER NOT NULL,  //guardar o CODFUN código do Funcionário aqui
+    CODCLI     INTEGER NOT NULL,  //Cliente CLIBAS
+    CODVEI     INTEGER NOT NULL,  //Veículo CADVEI
+    CODCPV     INTEGER NOT NULL,  //condição de pagamento 0 enquanto tipsrv for 1
+    HORFIM     TIMESTAMP,  //hora da finalização do serviço
+    DATFIM     TIMESTAMP,  //data da finalização do serviço
+    GARPEC     INTEGER,  //garantia em meses para produtos
+    GARMOB     INTEGER,    //garantia em meses para mão de obra
+    LIBSRV     CHAR(1),   //serviço liberado S - Sim N - Não -- aprovação para execução do serviço enquanto não, impossível faturar
+    TOTBRU     FLOAT,  //total bruto de produtos e mão de obra
+    VALDES     FLOAT,   //desconto global concedido
+    TOTLIQ     FLOAT,  //total líquido TOTBRU - VALDES = TOTLIQ
+    FATSRV     CHAR(1),  //faturamento campo a ser tratado em tela de faturamento que carregará emissão de notas boletos inicia sempre com N - Não e ao Faturar vira S - Sim
+    DATFAT     TIMESTAMP, //marca a data que faturou FATSRV virou S - Sim
+    NUMNFS     CHAR(10),  //número da nota fiscal de Serviço  preencher sempre com o primeiro número, caso sejam várias
+    NUMNFV     CHAR(10),  //número da nota fiscal de PRodutos preencher sempre com o primeiro número, caso sejam várias
+    OBSSRV     VARCHAR(500),  //observações da execução, informada pelo cliente
+    CODGEO     INTEGER,   //código do geometrista - CADFUN
+    PROBRU     NUMERIC(9,2),  //totalização bruta dos prdoutos da O.S vem sempre 0 - descontinuado
+    PRODES     NUMERIC(9,2),  //totalização dos descontos dos produtos da O.S vem sempre 0 - descontinuado
+    PROLIQ     NUMERIC(9,2),  //totalização liquita dos produtos da O.S PROBRU - PRODES - vem sempre 0 - descontinuado
+    SERBRU     NUMERIC(9,2), //totalização bruta dos serviços da O.S   - vem sempre 0 - descontinuado
+    SERDES     NUMERIC(9,2), //totalização dos descontos dos serviços da O.S - vem sempre 0 - descontinuado
+    SERLIQ     NUMERIC(9,2), //totalização liquida dos serviços da O.S SERBRU - SERDES- vem sempre 0 - descontinuado
+    LUBBRU     NUMERIC(9,2),  ////totalização bruta dos lubrificantes da O.S - vem sempre 0 - descontinuado
+    LUBDES     NUMERIC(9,2),  //totalização descontos dos lubrificantes da O.s - vem sempre 0 - descontinuado
+    LUBLIQ     NUMERIC(9,2), //totalização liquida dos lubrificantes da O.S - LUBBRU - LUBDES - vem sempre 0 - descontinuado
+    CODSMV     CHAR(50),  //código SMV
+    CODEMP     CHAR(50),  //codigo Empenho
+    CODORC     CHAR(50),  //código Orçamento externo
+    PARBRU     NUMERIC(9,2), //////totalização bruta das peças paralelas da O.S - vem sempre 0 - descontinuado
+    PARDES     NUMERIC(9,2), ////totalização desconto das peças paralelas da O.S - vem sempre 0 - descontinuado
+    PARLIQ     NUMERIC(9,2), ////totalização liquido das peças paralelas PARBRU - PARDES O.S - vem sempre 0 - descontinuado
+    TOTDESLOC  FLOAT  //total cobrado de deslocamento para Guincho ou busca do veículo
+);
+
+

@@ -1,18 +1,24 @@
 spring:
   datasource:
     driverClassName: org.firebirdsql.jdbc.FBDriver
-    #url: jdbc:firebirdsql://localhost:3050/C:/fix/6113/6113.fdb?encoding=UTF8
-    #url: jdbc:firebirdsql://localhost:3050//firebird/data/ronalds.fdb?encoding=UTF8
-    url: jdbc:firebirdsql://127.0.0.1:3050//firebird/data/ronalds.fdb?encoding=UTF8
+    #    url: jdbc:firebirdsql://127.0.0.1:3050//firebird/data/ronalds.fdb?encoding=UTF8
+    #    url: jdbc:firebirdsql://localhost:3050/C:/fix/6113/6113.fdb?encoding=UTF8
+    #url: jdbc:firebirdsql:127.0.0.1/3050:c:/fix/ronalds/ronalds.fdb?encoding=UTF8
+    url: jdbc:firebirdsql://127.0.0.1:3050/c:/fix/ronalds/ron.fdb?sql_dialect=3&charSet=utf-8&encoding=NONE
+
+
     username: SYSDBA
     password: masterkey
 
   jpa:
     database-platform: org.hibernate.community.dialect.FirebirdDialect
+    show-sql: false
     properties:
       hibernate:
         jdbc:
           time_zone: UTC
+        format_sql: true
+        use_sql_comments: false
 
   # Configuracao de email (ajuste conforme seu provedor)
   mail:
@@ -31,8 +37,26 @@ security:
   jwt:
     # Base64 do segredo, gere um valor forte em producao
     secret: c29tZS1zdXBlci1zZWNyZXQtand0LXNpZ25pbmcta2V5LXNlZWRiYXNlNjQ=
-    expiration: 3600000 # 1 hora em ms
+    expiration: 36000000 # 10 horas em ms (3600000 = 1 hora)
 
 app:
   mail:
     from: ${MAIL_FROM:}
+
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: ${SERVER_CONTEXT_PATH:/}
+
+# Configuracao do SpringDoc OpenAPI (Swagger)
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operationsSorter: method
+    tagsSorter: alpha
+    displayRequestDuration: true
+    defaultModelsExpandDepth: 1
+    defaultModelExpandDepth: 1

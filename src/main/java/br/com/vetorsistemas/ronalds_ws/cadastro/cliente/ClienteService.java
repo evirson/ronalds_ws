@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Service
 public class ClienteService {
 
@@ -80,19 +83,24 @@ public class ClienteService {
 
     @Transactional
     public ClienteDTO create(ClienteCreateUpdateDTO dto) {
+
+        validarCliente(dto);
+
         Cliente entity = mapper.fromCreateUpdateDTO(dto);
         return mapper.toDTO(repository.save(entity));
     }
 
     @Transactional
     public ClienteDTO update(Integer id, ClienteCreateUpdateDTO dto) {
+
+        validarCliente(dto);
+
         Cliente entity = repository.findById(id)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Cliente não encontrado"));
         mapper.updateEntityFromDTO(dto, entity);
         return mapper.toDTO(repository.save(entity));
     }
 
-    @Transactional
     public void delete(Integer id) {
         if (!repository.existsById(id)) {
             throw new AppException(HttpStatus.NOT_FOUND, "Cliente não encontrado");
@@ -113,5 +121,42 @@ public class ClienteService {
     private static String normalizeLike(String s) {
         if (isBlank(s)) return null;
         return s.trim().toUpperCase();
+    }
+
+    private void  validarCliente(ClienteCreateUpdateDTO dto){
+
+        try {
+            if (dto.getPis() == null){ dto.setPis(0.00);};
+            if (dto.getCofins() == null){ dto.setCofins(0.00);};
+            if (dto.getCsll() == null){ dto.setCsll(0.00);};
+            if (dto.getIrpj() == null){ dto.setIrpj(0.00);};
+            if (dto.getCofinsServico() == null){ dto.setCofinsServico(0.00);};
+            if (dto.getCsllServico() == null){ dto.setCsllServico(0.00);};
+            if (dto.getIrpjServico() == null){ dto.setIrpjServico(0.00);};
+            if (dto.getPisServico() == null){ dto.setPisServico(0.00);};
+            if (dto.getIss() == null){ dto.setIss(0.00);}
+
+            if (dto.getClienteDesde() == null){
+                dto.setClienteDesde(LocalDate.now());
+            }
+
+            if (dto.getDataCadastro() == null){
+                dto.setDataCadastro(LocalDate.now());
+            }
+
+            if (dto.getDataNascimento() == null){
+                dto.setDataNascimento(LocalDate.now());
+            }
+
+            if (dto.getDataFundacaoOuNascimento() == null){
+                dto.setDataFundacaoOuNascimento(LocalDate.now());
+            }
+
+        } catch (Exception e){
+
+            throw new AppException(HttpStatus.NOT_FOUND, "Erro ao Validar Cliente");
+
+        }
+
     }
 }

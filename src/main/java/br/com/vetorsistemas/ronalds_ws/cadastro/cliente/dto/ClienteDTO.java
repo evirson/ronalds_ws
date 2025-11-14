@@ -1,5 +1,6 @@
 package br.com.vetorsistemas.ronalds_ws.cadastro.cliente.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +14,14 @@ import java.time.LocalDateTime;
 public class ClienteDTO {
     private Integer id;
     private String sexo;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime dataFundacaoOuNascimento;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime clienteDesde;
+
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime dataCadastro;
     private String nomeFantasia;
     private String inscricaoEstadualDocumento;
@@ -49,5 +56,6 @@ public class ClienteDTO {
     private Double csllServico;
     private Double irpjServico;
     private Double pisServico;
+    @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime dataNascimento;
 }
