@@ -3,16 +3,16 @@ package br.com.vetorsistemas.ronalds_ws.cadastro.cartao;
 import br.com.vetorsistemas.ronalds_ws.cadastro.cartao.Dto.CartaoDto;
 import jakarta.validation.Valid;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
 import java.net.URI;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.util.List;
 
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5173","http://localhost:4200"}, allowCredentials = "false")
 @RestController
-@RequestMapping("/api/cadastros/cartoes")
+@RequestMapping("/api/cartao-credito")
 public class CartaoController {
 
     private final CartaoService service;

@@ -2,11 +2,14 @@ package br.com.vetorsistemas.ronalds_ws.cadastro.veiculo;
 
 import br.com.vetorsistemas.ronalds_ws.cadastro.veiculo.dto.VeiculoDto;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Validated
 @RequestMapping("/api/veiculos")
 public class VeiculoController {
 
@@ -17,11 +20,10 @@ public class VeiculoController {
     }
 
     @GetMapping
-    @CrossOrigin
     public ResponseEntity<Page<VeiculoDto>> search(
-            @RequestParam(required = false) String placa,
-            @RequestParam(required = false, name = "tipo") String tipo,
-            @RequestParam(required = false) String modelo,
+            @RequestParam(required = false) @Size(max = 8) String placa,
+            @RequestParam(required = false, name = "tipo") @Size(max = 25) String tipo,
+            @RequestParam(required = false) @Size(max = 50) String modelo,
             @RequestParam(defaultValue = "0") Integer pagina,
             @RequestParam(defaultValue = "20") Integer tamanho) {
         return ResponseEntity.ok(service.search(placa, tipo, modelo, pagina, tamanho));

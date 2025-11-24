@@ -24,7 +24,6 @@ public class PaisController {
     }
 
     @GetMapping
-    @CrossOrigin
     public ResponseEntity<Page<PaisDTO>> list(
             @RequestParam(value = "nome", required = false) String nome,
             @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
@@ -34,26 +33,22 @@ public class PaisController {
     }
 
     @GetMapping("/{id}")
-    @CrossOrigin
     public ResponseEntity<PaisDTO> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
-    @CrossOrigin
     public ResponseEntity<PaisDTO> create(@Valid @RequestBody PaisCreateUpdateDTO body) {
         return ResponseEntity.ok(service.create(body));
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin
     public ResponseEntity<PaisDTO> update(@PathVariable Integer id,
                                           @Valid @RequestBody PaisCreateUpdateDTO body) {
         return ResponseEntity.ok(service.update(id, body));
     }
 
     @DeleteMapping("/{id}")
-    @CrossOrigin
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();

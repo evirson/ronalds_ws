@@ -1,9 +1,0 @@
-tabela estados
-CREATE TABLE ESTADOS (
-    CODEST  INTEGER NOT NULL,  //codigo id
-    SIGEST  CHAR(2),  //sigla do estado PR ES SC RS
-    NOMEST  VARCHAR(30),  //nome do Estado Rio Grande do Sul , Paraná
-    CODPAI  INTEGER  //Código do País vem da tabela PAISES
-);
-
-

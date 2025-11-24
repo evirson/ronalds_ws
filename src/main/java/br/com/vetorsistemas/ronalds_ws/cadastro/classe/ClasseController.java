@@ -5,9 +5,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5173","http://localhost:4200"}, allowCredentials = "false")
 @RestController
 @RequestMapping("/api/classes")
 public class ClasseController {
@@ -20,11 +18,12 @@ public class ClasseController {
 
     @GetMapping
     public ResponseEntity<Page<ClasseDto>> list(
+            @RequestParam(value = "tipoClasse", required = true) String tipoClasse,
             @RequestParam(value = "nomeClasse", required = false) String nomeClasse,
             @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
             @RequestParam(value = "tamanho-pagina", defaultValue = "10") Integer tamanhoPagina
     ) {
-        return ResponseEntity.ok(service.search(nomeClasse, pagina, tamanhoPagina));
+        return ResponseEntity.ok(service.search(tipoClasse, nomeClasse, pagina, tamanhoPagina));
     }
 
     @GetMapping("/{id}")

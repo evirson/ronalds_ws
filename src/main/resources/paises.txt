@@ -1,9 +1,0 @@
-
-
-//tabela paises
-CREATE TABLE PAISES (
-    CODPAI  INTEGER NOT NULL,  //codigo ID
-    DESPAI  VARCHAR(100) NOT NULL  //nome do Pais
-);
-
-

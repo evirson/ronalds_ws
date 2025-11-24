@@ -21,8 +21,6 @@ public class VeiculoMapper {
         v.setMotor(dto.getMotor());
         v.setModelo(dto.getModelo());
         v.setKm(dto.getKm());
-        v.setDataCadastro(dto.getDataCadastro());
-        v.setDataAtualizacao(dto.getDataAtualizacao());
         v.setArCondicionado(dto.getArCondicionado());
         v.setDirecao(dto.getDirecao());
         v.setTransmissao(dto.getTransmissao());
@@ -46,8 +44,6 @@ public class VeiculoMapper {
         dto.setMotor(v.getMotor());
         dto.setModelo(v.getModelo());
         dto.setKm(v.getKm());
-        dto.setDataCadastro(v.getDataCadastro());
-        dto.setDataAtualizacao(v.getDataAtualizacao());
         dto.setArCondicionado(v.getArCondicionado());
         dto.setDirecao(v.getDirecao());
         dto.setTransmissao(v.getTransmissao());
@@ -75,6 +71,5 @@ public class VeiculoMapper {
         v.setTamanhoAro(dto.getTamanhoAro());
         v.setTemAbs(dto.getTemAbs());
         v.setOleoMotor(dto.getOleoMotor());
-        // datas tratadas no service
     }
 }

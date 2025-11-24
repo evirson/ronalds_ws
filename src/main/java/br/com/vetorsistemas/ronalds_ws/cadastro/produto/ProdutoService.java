@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Service
 public class ProdutoService {
     private final ProdutoRepository repository;
@@ -27,24 +29,39 @@ public class ProdutoService {
                                  Integer idGrupo,
                                  Integer idSubGrupo,
                                  Integer idFabricante,
+                                 Integer idFornecedor,
                                  String ncm,
                                  Integer pagina,
                                  Integer tamanhoPagina) {
+
         if (pagina == null || pagina < 0) pagina = 0;
+
         if (tamanhoPagina == null || tamanhoPagina <= 0) tamanhoPagina = 10;
 
         var specs = (org.springframework.data.jpa.domain.Specification<Produto>) (root, query, cb) -> cb.conjunction();
+
         String desc = normalizeLike(descricao);
+
         String ref = normalizeLike(referencia);
+
         String ncmLike = normalizeLike(ncm);
+
         if (desc != null) specs = specs.and((r,q,cb) -> cb.like(cb.upper(r.get("descricao")), "%"+desc+"%"));
+
         if (ref != null) specs = specs.and((r,q,cb) -> cb.like(cb.upper(r.get("referencia")), "%"+ref+"%"));
+
         if (idGrupo != null) specs = specs.and((r,q,cb) -> cb.equal(r.get("idGrupo"), idGrupo));
+
         if (idSubGrupo != null) specs = specs.and((r,q,cb) -> cb.equal(r.get("idSubGrupo"), idSubGrupo));
+
         if (idFabricante != null) specs = specs.and((r,q,cb) -> cb.equal(r.get("idFabricante"), idFabricante));
+
+        if (idFornecedor != null) specs = specs.and((r,q,cb) -> cb.equal(r.get("idFornecedor"), idFornecedor));
+
         if (ncmLike != null) specs = specs.and((r,q,cb) -> cb.like(cb.upper(r.get("ncm")), "%"+ncmLike+"%"));
 
         Pageable page = PageRequest.of(pagina, tamanhoPagina, Sort.by("descricao").ascending());
+
         return repository.findAll(specs, page).map(mapper::toDTO);
     }
 
@@ -54,6 +71,7 @@ public class ProdutoService {
     public ProdutoDto findById(Integer id) {
         Produto e = repository.findById(id)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
+
         return mapper.toDTO(e);
     }
 
@@ -61,6 +79,9 @@ public class ProdutoService {
     public ProdutoDto create(ProdutoDto dto) {
         Produto e = mapper.fromDTO(dto);
         e.setId(null);
+
+        e.setDataCadastro(LocalDateTime.now());
+
         return mapper.toDTO(repository.save(e));
     }
 
@@ -69,6 +90,9 @@ public class ProdutoService {
         Produto e = repository.findById(id)
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Produto não encontrado"));
         mapper.updateEntityFromDTO(dto, e);
+
+        e.setDataAtualizacao(LocalDateTime.now());
+
         return mapper.toDTO(repository.save(e));
     }
 

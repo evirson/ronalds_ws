@@ -7,9 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5173","http://localhost:4200"}, allowCredentials = "false")
 @RestController
 @RequestMapping("/api/classificacao")
 public class ClassificacaoFiscalController {
@@ -22,16 +20,12 @@ public class ClassificacaoFiscalController {
 
     @GetMapping
     public ResponseEntity<Page<ClassificacaoFiscalDto>> list(
+            @RequestParam(value = "codigoNcm", required = false) String codigoNcm,
             @RequestParam(value = "nomeClassificacao", required = false) String nomeClassificacao,
             @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
             @RequestParam(value = "tamanho-pagina", defaultValue = "10") Integer tamanhoPagina
     ) {
-        return ResponseEntity.ok(service.search(nomeClassificacao, pagina, tamanhoPagina));
-    }
-
-    @GetMapping("/{codigoNcm}")
-    public ResponseEntity<ClassificacaoFiscalDto> getByCodigoNcm(@PathVariable String codigoNcm) {
-        return ResponseEntity.ok(service.findByCodigoNcm(codigoNcm));
+        return ResponseEntity.ok(service.search(codigoNcm, nomeClassificacao, pagina, tamanhoPagina));
     }
 
     @PostMapping

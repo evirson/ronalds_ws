@@ -1,5 +1,7 @@
 package br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.dto;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,10 +13,18 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ItemOrdemServicoCreateUpdateDTO {
 
+    @NotNull
     private Integer codigoOrdemServico;
+
+    @NotNull
     private Integer codigoProduto;
+
+    @Size(max = 1)
     private String tipoProduto;
+
+    @Size(max = 50)
     private String descricaoProduto;
+
     private Double quantidade;
     private Double precoUnitario;
     private Double percentualDesconto;

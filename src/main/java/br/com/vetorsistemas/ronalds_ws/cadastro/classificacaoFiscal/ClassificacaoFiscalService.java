@@ -29,12 +29,18 @@ public class ClassificacaoFiscalService {
         this.mapper = mapper;
     }
 
-    public Page<ClassificacaoFiscalDto> search(String descricaoNcm,
+    public Page<ClassificacaoFiscalDto> search(String codigoNcm,
+                                               String descricaoNcm,
                                                Integer pagina,
                                                Integer tamanhoPagina) {
 
         Specification<ClassificacaoFiscal> specs = (root, query, cb) -> cb.conjunction();
 
+        if (codigoNcm != null) {
+            specs = specs.and((root, query, cb) ->
+                    cb.equal(root.get("codigoNcm"), codigoNcm.toUpperCase()));
+
+        }
 
         if (descricaoNcm != null) {
             specs = specs.and((root, query, cb) ->
@@ -55,11 +61,6 @@ public class ClassificacaoFiscalService {
     }
 
 
-    public ClassificacaoFiscalDto findByCodigoNcm(String codigoNcm) {
-        ClassificacaoFiscal entity = repository.findByCodigoNcm(codigoNcm)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Classificacao não encontrada"));
-        return mapper.toDTO(entity);
-    }
 
     @Transactional
     public ClassificacaoFiscalDto create(ClassificacaoFiscalDto dto) {

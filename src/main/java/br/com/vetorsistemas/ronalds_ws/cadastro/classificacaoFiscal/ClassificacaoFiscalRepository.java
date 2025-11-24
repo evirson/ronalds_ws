@@ -9,7 +9,5 @@ import java.util.Optional;
 public interface ClassificacaoFiscalRepository extends JpaRepository<ClassificacaoFiscal, Integer>,
         JpaSpecificationExecutor<ClassificacaoFiscal> {
 
-    Optional<ClassificacaoFiscal> findByCodigoNcm(String codigoNcm);
-
 
 }

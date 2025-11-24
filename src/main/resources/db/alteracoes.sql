@@ -59,9 +59,30 @@ create generator gt_srvitn_coditn;
 create generator gt_estados_codest;
 create generator gt_pais_codpai;
 
+
 alter table cademp alter column fonemp type varchar(12);
 
 alter table cadfun alter column telfun type varchar(12);
 alter table cadfun alter column celfun type varchar(12);
 
 drop trigger tg_cadsrv_update;
+
+alter table cadpro drop dscavi;
+alter table cadpro drop aviatv;
+alter table cadpro drop aviini;
+alter table cadpro drop avifim;
+alter table cadpro drop prepra;
+alter table cadpro drop dscpra;
+alter table cadpro drop praatv;
+alter table cadpro drop praini;
+alter table cadpro drop prafim;
+alter table cadpro drop bxaest;
+alter table cadpro drop crvabc;
+alter table cadpro drop cusmed;
+alter table cadpro drop ultcpr;
+alter table cadpro drop ultvda;
+alter table cadpro drop clafis;
+alter table cadpro drop claori;
+alter table cadpro drop clatri;
+alter table cadpro drop cusind;
+

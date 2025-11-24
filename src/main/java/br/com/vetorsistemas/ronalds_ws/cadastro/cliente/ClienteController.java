@@ -24,7 +24,6 @@ public class ClienteController {
     }
 
     @GetMapping
-    @CrossOrigin
     @Operation(summary = "Listar Clientes", description = "Lista todos os clientes com filtros opcionais")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
@@ -43,7 +42,6 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
-    @CrossOrigin
     @Operation(summary = "Buscar Cliente por ID", description = "Retorna um cliente específico pelo ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cliente encontrado"),
@@ -55,7 +53,6 @@ public class ClienteController {
     }
 
     @PostMapping
-    @CrossOrigin
     @Operation(summary = "Criar Cliente", description = "Cria um novo cliente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cliente criado com sucesso"),
@@ -66,7 +63,6 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin
     @Operation(summary = "Atualizar Cliente", description = "Atualiza um cliente existente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso"),
@@ -80,7 +76,6 @@ public class ClienteController {
     }
 
     @DeleteMapping("/{id}")
-    @CrossOrigin
     @Operation(summary = "Excluir Cliente", description = "Exclui um cliente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Cliente excluído com sucesso"),

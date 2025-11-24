@@ -3,7 +3,15 @@
     "allow": [
       "Bash(mvn compile:*)",
       "Bash(./mvnw.cmd compile:*)",
-      "Bash(./mvnw.cmd clean:*)"
+      "Bash(./mvnw.cmd clean:*)",
+      "Bash(powershell -Command \"Get-ChildItem -Path ''src/main/java'' -Filter ''*Controller.java'' -Recurse | ForEach-Object { (Get-Content $_FullName -Raw) -replace ''@CrossOrigin\\(origins\\s*=\\s*\\{[^\\}]+\\}\\s*,\\s*allowCredentials\\s*=\\s*\"\"false\"\"\\)\\r?\\n'', '''' | Set-Content $_FullName -NoNewline }\")",
+      "Bash(./mvnw.cmd spring-boot:run:*)",
+      "Bash(timeout /t 15 /nobreak)",
+      "Bash(powershell -Command \"Start-Sleep -Seconds 10\")",
+      "Bash(powershell:*)",
+      "Bash(taskkill:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)"
     ],
     "deny": [],
     "ask": []

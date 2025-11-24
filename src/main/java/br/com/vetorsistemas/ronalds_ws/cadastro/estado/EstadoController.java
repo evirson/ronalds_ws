@@ -24,7 +24,6 @@ public class EstadoController {
     }
 
     @GetMapping
-    @CrossOrigin
     public ResponseEntity<Page<EstadoDTO>> list(
             @RequestParam(value = "sigla", required = false) String sigla,
             @RequestParam(value = "nome", required = false) String nome,
@@ -36,26 +35,22 @@ public class EstadoController {
     }
 
     @GetMapping("/{id}")
-    @CrossOrigin
     public ResponseEntity<EstadoDTO> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
-    @CrossOrigin
     public ResponseEntity<EstadoDTO> create(@Valid @RequestBody EstadoCreateUpdateDTO body) {
         return ResponseEntity.ok(service.create(body));
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin
     public ResponseEntity<EstadoDTO> update(@PathVariable Integer id,
                                             @Valid @RequestBody EstadoCreateUpdateDTO body) {
         return ResponseEntity.ok(service.update(id, body));
     }
 
     @DeleteMapping("/{id}")
-    @CrossOrigin
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();

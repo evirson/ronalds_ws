@@ -25,18 +25,28 @@ public class ClasseService {
         this.mapper = mapper;
     }
 
-    public Page<ClasseDto> search(String nomeClasse,
+    public Page<ClasseDto> search(String tipoClasse,
+                                  String nomeClasse,
                                   Integer pagina,
                                   Integer tamanhoPagina ) {
 
         Specification<Classe> specs = (root, query, cb) -> cb.conjunction();
 
+        if (tipoClasse != null){
+            if (tipoClasse.equals("1") || tipoClasse.equals("2") || tipoClasse.equals("3") ) {
+                specs = specs.and((root, query, cb) ->
+                        cb.equal(root.get("tipoClasse"), tipoClasse.toUpperCase()));
+
+            }
+
+        }
 
         if (nomeClasse != null){
             specs = specs.and((root, query, cb) ->
                     cb.like(root.get("nomeClasse"), "%" + nomeClasse.toUpperCase() +"%"));
 
         }
+
 
         Sort sort = Sort.by( "nomeClasse").ascending();
 

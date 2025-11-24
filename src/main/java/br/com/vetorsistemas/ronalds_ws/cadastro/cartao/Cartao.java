@@ -18,10 +18,10 @@ import java.time.LocalDateTime;
 public class Cartao {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gt_cadcla_codcla")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gt_cadcrt_codcrt")
     @SequenceGenerator(
-            name = "gt_cadcla_codcla",
-            sequenceName = "gt_cadcla_codcla", // nome real da sequência no banco
+            name = "gt_cadcrt_codcrt",
+            sequenceName = "gt_cadcrt_codcrt", // nome real da sequência no banco
             allocationSize = 1                     // incrementa de 1 em 1
     )
     @Column(name = "CODCRT")

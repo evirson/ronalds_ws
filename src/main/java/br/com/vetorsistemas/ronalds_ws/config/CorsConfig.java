@@ -14,14 +14,18 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 public class CorsConfig {
 
+    private final CorsProperties corsProperties;
+
+    public CorsConfig(CorsProperties corsProperties) {
+        this.corsProperties = corsProperties;
+    }
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
 
-        // Permite todas as origens de desenvolvimento e produção
-        // Em produção, substitua por origens específicas, ex:
-        // config.setAllowedOrigins(List.of("https://seu-dominio.com.br"));
-        config.setAllowedOriginPatterns(List.of("*"));
+        // Origens permitidas vindas do application.yaml
+        config.setAllowedOrigins(corsProperties.getAllowedOrigins());
 
         // Métodos HTTP permitidos
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
@@ -32,8 +36,8 @@ public class CorsConfig {
         // Headers expostos ao cliente (importante para JWT)
         config.setExposedHeaders(List.of("Authorization", "Location"));
 
-        // Permite credenciais (necessário para alguns clientes)
-        config.setAllowCredentials(true);
+        // Permite credenciais conforme configuração do yaml
+        config.setAllowCredentials(corsProperties.isAllowCredentials());
 
         // Cache da configuração CORS (1 hora em segundos)
         config.setMaxAge(3600L);

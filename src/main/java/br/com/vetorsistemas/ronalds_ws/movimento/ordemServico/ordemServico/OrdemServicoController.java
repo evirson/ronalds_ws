@@ -27,7 +27,6 @@ public class OrdemServicoController {
     }
 
     @GetMapping
-    @CrossOrigin
     @Operation(summary = "Listar Ordens de Serviço", description = "Lista todas as Ordens de Serviço com filtros opcionais")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista retornada com sucesso")
@@ -61,7 +60,6 @@ public class OrdemServicoController {
     }
 
     @GetMapping("/{id}")
-    @CrossOrigin
     @Operation(summary = "Buscar Ordem de Serviço por ID", description = "Retorna uma Ordem de Serviço específica pelo ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ordem de Serviço encontrada"),
@@ -73,7 +71,6 @@ public class OrdemServicoController {
     }
 
     @PostMapping
-    @CrossOrigin
     @Operation(summary = "Criar Ordem de Serviço", description = "Cria uma nova Ordem de Serviço")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ordem de Serviço criada com sucesso"),
@@ -84,7 +81,6 @@ public class OrdemServicoController {
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin
     @Operation(summary = "Atualizar Ordem de Serviço", description = "Atualiza uma Ordem de Serviço existente")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Ordem de Serviço atualizada com sucesso"),
@@ -98,7 +94,6 @@ public class OrdemServicoController {
     }
 
     @DeleteMapping("/{id}")
-    @CrossOrigin
     @Operation(summary = "Excluir Ordem de Serviço", description = "Exclui uma Ordem de Serviço (não permite se estiver faturada)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "Ordem de Serviço excluída com sucesso"),

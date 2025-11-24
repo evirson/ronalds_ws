@@ -26,7 +26,6 @@ public class ItemOrdemServicoController {
     }
 
     @GetMapping
-    @CrossOrigin
     public ResponseEntity<Page<ItemOrdemServicoDTO>> list(
             @RequestParam(value = "codigoOrdemServico", required = false) Integer codigoOrdemServico,
             @RequestParam(value = "codigoProduto", required = false) Integer codigoProduto,
@@ -38,32 +37,27 @@ public class ItemOrdemServicoController {
     }
 
     @GetMapping("/ordem-servico/{codigoOrdemServico}")
-    @CrossOrigin
     public ResponseEntity<List<ItemOrdemServicoDTO>> listByOrdemServico(@PathVariable Integer codigoOrdemServico) {
         return ResponseEntity.ok(service.findByOrdemServico(codigoOrdemServico));
     }
 
     @GetMapping("/{id}")
-    @CrossOrigin
     public ResponseEntity<ItemOrdemServicoDTO> getById(@PathVariable Integer id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
     @PostMapping
-    @CrossOrigin
     public ResponseEntity<ItemOrdemServicoDTO> create(@Valid @RequestBody ItemOrdemServicoCreateUpdateDTO body) {
         return ResponseEntity.ok(service.create(body));
     }
 
     @PutMapping("/{id}")
-    @CrossOrigin
     public ResponseEntity<ItemOrdemServicoDTO> update(@PathVariable Integer id,
                                                        @Valid @RequestBody ItemOrdemServicoCreateUpdateDTO body) {
         return ResponseEntity.ok(service.update(id, body));
     }
 
     @DeleteMapping("/{id}")
-    @CrossOrigin
     public ResponseEntity<Void> delete(@PathVariable Integer id) {
         service.delete(id);
         return ResponseEntity.noContent().build();

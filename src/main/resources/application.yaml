@@ -4,7 +4,7 @@ spring:
     #    url: jdbc:firebirdsql://127.0.0.1:3050//firebird/data/ronalds.fdb?encoding=UTF8
     #    url: jdbc:firebirdsql://localhost:3050/C:/fix/6113/6113.fdb?encoding=UTF8
     #url: jdbc:firebirdsql:127.0.0.1/3050:c:/fix/ronalds/ronalds.fdb?encoding=UTF8
-    url: jdbc:firebirdsql://127.0.0.1:3050/c:/fix/ronalds/ron.fdb?sql_dialect=3&charSet=utf-8&encoding=NONE
+    url: jdbc:firebirdsql://127.0.0.1:3050/c:/fix/ronalds/ron.fdb?sql_dialect=3&encoding=UTF8
 
 
     username: SYSDBA
@@ -42,11 +42,23 @@ security:
 app:
   mail:
     from: ${MAIL_FROM:}
+  cors:
+    allowed-origins:
+      - http://localhost:3000
+      - http://localhost:5173
+      - http://localhost:4200
+    allow-credentials: false
 
 server:
   port: ${SERVER_PORT:8080}
   servlet:
     context-path: ${SERVER_CONTEXT_PATH:/}
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+  tomcat:
+    uri-encoding: UTF-8
 
 # Configuracao do SpringDoc OpenAPI (Swagger)
 springdoc:

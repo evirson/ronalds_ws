@@ -24,16 +24,25 @@ public class PlanoContasService {
     @Transactional(readOnly = true)
     public Page<PlanoContasDto> list(String descricao, Integer pagina, Integer tamanhoPagina) {
         if (pagina == null || pagina < 0) pagina = 0;
+
         if (tamanhoPagina == null || tamanhoPagina <= 0) tamanhoPagina = 10;
+
         var specs = (org.springframework.data.jpa.domain.Specification<PlanoContas>) (root, query, cb) -> cb.conjunction();
         String desc = normalizeLike(descricao);
-        if (desc != null) specs = specs.and((r,q,cb) -> cb.like(cb.upper(r.get("descricao")), "%"+desc+"%"));
+
+        if (desc != null) specs = specs.and((r, q, cb) -> cb.like(cb.upper(r.get("descricao")), "%" + desc + "%"));
         Pageable page = PageRequest.of(pagina, tamanhoPagina, Sort.by("descricao").ascending());
         return repository.findAll(specs, page).map(mapper::toDTO);
     }
 
-    private static boolean isBlank(String s){return s==null||s.trim().isEmpty();}
-    private static String normalizeLike(String s){if(isBlank(s))return null;return s.trim().toUpperCase();}
+    private static boolean isBlank(String s) {
+        return s == null || s.trim().isEmpty();
+    }
+
+    private static String normalizeLike(String s) {
+        if (isBlank(s)) return null;
+        return s.trim().toUpperCase();
+    }
 
     public PlanoContasDto findById(String id) {
         PlanoContas e = repository.findById(id)

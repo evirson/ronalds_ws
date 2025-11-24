@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class PlanoContas {
 
     @Id
-    @Column(name = "COPLA", length = 8, nullable = false)
+    @Column(name = "CODPLA", length = 8, nullable = false)
     private String id;
     @Column(name = "NOMPLA", length = 50, nullable = false)
     private String descricao;

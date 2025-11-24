@@ -14,6 +14,7 @@ import jakarta.validation.constraints.*;
 public class ProdutoDto {
     private Integer id;
     private String tipoProduto;
+    private Integer idFornecedor;
     private Integer idFabricante;
     private Integer idClasse;
     private Integer idGrupo;
@@ -21,33 +22,13 @@ public class ProdutoDto {
     @Size(max = 2)
     private String unidade;
     private Double custo;
-    private Double custoIndice;
     private Double precoVista;
-    private Double descontoVista;
-    private String ativaPrecoVista;
-    private LocalDateTime inicioUsoPrecoVista;
-    private LocalDateTime finalUsoPrecoVista;
-    private Double precoPrazo;
-    private Double descontoPrazo;
-    private String ativaPrecoPrazo;
-    private LocalDateTime inicioUsoPrecoPrazo;
-    private LocalDateTime finalUsoPrecoPrazo;
     private Integer prazoGarantiaMeses;
-    private String baixaEstoque;
-    private String curvaAbc;
     private Double percentualLucro;
-    private Double custoMedio;
-    private LocalDateTime ultimaCompra;
-    private LocalDateTime ultimaVenda;
-    private String classificacaoOrigem;
-    private String classificacaoTributaria;
     private Double percentualIcm;
     private Double percentualIpi;
     private Double percentualBaseCalculo;
-    private String classificaoFiscal;
     private Integer tabelaPreco;
-    private LocalDateTime dataCadastro;
-    private LocalDateTime dataAtualizacao;
     @NotBlank @Size(max = 80)
     private String descricao;
     @NotBlank @Size(max = 25)

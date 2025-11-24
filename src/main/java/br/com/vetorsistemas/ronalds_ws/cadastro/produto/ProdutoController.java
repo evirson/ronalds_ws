@@ -5,11 +5,9 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
-@CrossOrigin(origins = {"http://localhost:3000","http://localhost:5173","http://localhost:4200"}, allowCredentials = "false")
 @RestController
-@RequestMapping("/api/cadastros/produtos")
+@RequestMapping("/api/produtos")
 public class ProdutoController {
 
     private final ProdutoService service;
@@ -25,11 +23,12 @@ public class ProdutoController {
             @RequestParam(value = "idGrupo", required = false) Integer idGrupo,
             @RequestParam(value = "idSubGrupo", required = false) Integer idSubGrupo,
             @RequestParam(value = "idFabricante", required = false) Integer idFabricante,
+            @RequestParam(value = "idFornecedor", required = false) Integer idFornecedor,
             @RequestParam(value = "ncm", required = false) String ncm,
             @RequestParam(value = "pagina", defaultValue = "0") Integer pagina,
             @RequestParam(value = "tamanho-pagina", defaultValue = "10") Integer tamanhoPagina
     ) {
-        return ResponseEntity.ok(service.list(descricao, referencia, idGrupo, idSubGrupo, idFabricante, ncm, pagina, tamanhoPagina));
+        return ResponseEntity.ok(service.list(descricao, referencia, idGrupo, idSubGrupo, idFabricante, idFornecedor, ncm, pagina, tamanhoPagina));
     }
 
     @GetMapping("/{id}")
