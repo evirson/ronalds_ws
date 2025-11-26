@@ -1,10 +1,12 @@
 package br.com.vetorsistemas.ronalds_ws.cadastro.funcionario.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -16,11 +18,12 @@ public class FuncionarioDto {
     private String nome;
     private String cpf;
     private String cargo;
-    private LocalDateTime dataAdmissao;
-    private LocalDateTime dataNascimento;
-    private LocalDateTime dataDemissao;
-    private LocalDateTime dataCadastro;
-    private LocalDateTime dataAlteracao;
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate dataAdmissao;
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate dataNascimento;
+    @JsonFormat(pattern = "dd-MM-yyyy")
+    private LocalDate dataDemissao;
     private Double comissaoPecas;
     private Double comissaoMaoObra;
     private String documento;

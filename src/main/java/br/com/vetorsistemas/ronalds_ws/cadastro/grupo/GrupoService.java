@@ -24,16 +24,26 @@ public class GrupoService {
     @Transactional(readOnly = true)
     public Page<GrupoDto> list(String nomeGrupo, Integer pagina, Integer tamanhoPagina) {
         if (pagina == null || pagina < 0) pagina = 0;
+
         if (tamanhoPagina == null || tamanhoPagina <= 0) tamanhoPagina = 10;
+
         var specs = (org.springframework.data.jpa.domain.Specification<Grupo>) (root, query, cb) -> cb.conjunction();
         String nome = normalizeLike(nomeGrupo);
-        if (nome != null) specs = specs.and((r,q,cb) -> cb.like(cb.upper(r.get("nomeGrupo")), "%"+nome+"%"));
+
+        if (nome != null) specs = specs.and((r, q, cb) -> cb.like(cb.upper(r.get("nomeGrupo")), "%" + nome + "%"));
         Pageable page = PageRequest.of(pagina, tamanhoPagina, Sort.by("nomeGrupo").ascending());
+
         return repository.findAll(specs, page).map(mapper::toDTO);
     }
 
-    private static boolean isBlank(String s){return s==null||s.trim().isEmpty();}
-    private static String normalizeLike(String s){if(isBlank(s))return null;return s.trim().toUpperCase();}
+    private static boolean isBlank(String s) {
+        return s == null || s.trim().isEmpty();
+    }
+
+    private static String normalizeLike(String s) {
+        if (isBlank(s)) return null;
+        return s.trim().toUpperCase();
+    }
 
     public GrupoDto findById(Integer id) {
         Grupo e = repository.findById(id)

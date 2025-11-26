@@ -45,8 +45,10 @@ public class FuncionarioService {
             throw new AppException(HttpStatus.CONFLICT, "CPF já cadastrado");
         });
         Funcionario ent = mapper.toEntity(dto);
+
         ent.setDataCadastro(LocalDateTime.now());
         ent.setDataAlteracao(LocalDateTime.now());
+
         Funcionario saved = repository.save(ent);
         return mapper.toDto(saved);
     }
@@ -64,9 +66,9 @@ public class FuncionarioService {
             ent.setCpf(dto.getCpf());
         }
         if (dto.getCargo() != null) ent.setCargo(dto.getCargo());
-        if (dto.getDataAdmissao() != null) ent.setDataAdmissao(dto.getDataAdmissao());
-        if (dto.getDataDemissao() != null) ent.setDataDemissao(dto.getDataDemissao());
-        if (dto.getDataNascimento() != null) ent.setDataNascimento(dto.getDataNascimento());
+        if (dto.getDataAdmissao() != null) ent.setDataAdmissao(dto.getDataAdmissao().atStartOfDay());
+        if (dto.getDataDemissao() != null) ent.setDataDemissao(dto.getDataDemissao().atStartOfDay());
+        if (dto.getDataNascimento() != null) ent.setDataNascimento(dto.getDataNascimento().atStartOfDay());
         if (dto.getComissaoPecas() != null) ent.setComissaoPecas(dto.getComissaoPecas());
         if (dto.getComissaoMaoObra() != null) ent.setComissaoMaoObra(dto.getComissaoMaoObra());
         if (dto.getDocumento() != null) ent.setDocumento(dto.getDocumento());

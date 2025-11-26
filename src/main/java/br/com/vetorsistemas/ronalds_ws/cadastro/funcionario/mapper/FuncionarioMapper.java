@@ -15,9 +15,9 @@ public class FuncionarioMapper {
         f.setNome(dto.getNome());
         f.setCpf(dto.getCpf());
         f.setCargo(dto.getCargo());
-        f.setDataAdmissao(dto.getDataAdmissao());
-        f.setDataNascimento(dto.getDataNascimento());
-        f.setDataDemissao(dto.getDataDemissao());
+        f.setDataAdmissao(dto.getDataAdmissao() != null ? dto.getDataAdmissao().atStartOfDay() : null);
+        f.setDataNascimento(dto.getDataNascimento() != null ? dto.getDataNascimento().atStartOfDay() : null);
+        f.setDataDemissao(dto.getDataDemissao() != null ? dto.getDataDemissao().atStartOfDay() : null);
         f.setComissaoPecas(dto.getComissaoPecas());
         f.setComissaoMaoObra(dto.getComissaoMaoObra());
         f.setDocumento(dto.getDocumento());
@@ -28,8 +28,6 @@ public class FuncionarioMapper {
         f.setEstado(dto.getEstado());
         f.setFone(dto.getFone());
         f.setCelular(dto.getCelular());
-        f.setDataCadastro(LocalDateTime.now());
-        f.setDataAlteracao(LocalDateTime.now());
         return f;
     }
 
@@ -40,11 +38,9 @@ public class FuncionarioMapper {
                 .nome(f.getNome())
                 .cpf(f.getCpf())
                 .cargo(f.getCargo())
-                .dataAdmissao(f.getDataAdmissao())
-                .dataNascimento(f.getDataNascimento())
-                .dataDemissao(f.getDataDemissao())
-                .dataCadastro(f.getDataCadastro())
-                .dataAlteracao(f.getDataAlteracao())
+                .dataAdmissao(f.getDataAdmissao() != null ? f.getDataAdmissao().toLocalDate() : null)
+                .dataNascimento(f.getDataNascimento() != null ? f.getDataNascimento().toLocalDate() : null)
+                .dataDemissao(f.getDataDemissao() != null ? f.getDataDemissao().toLocalDate() : null)
                 .comissaoPecas(f.getComissaoPecas())
                 .comissaoMaoObra(f.getComissaoMaoObra())
                 .documento(f.getDocumento())

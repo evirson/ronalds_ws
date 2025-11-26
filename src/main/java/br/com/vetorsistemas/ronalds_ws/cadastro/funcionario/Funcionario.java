@@ -41,12 +41,6 @@ public class Funcionario {
     @Column(name = "DATDEM")
     @JsonFormat(pattern = "dd-MM-yyyy")
     private LocalDateTime dataDemissao;
-    @Column(name = "DATCAD", nullable = false)
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDateTime dataCadastro;
-    @Column(name = "DATAUT", nullable = false)
-    @JsonFormat(pattern = "dd-MM-yyyy")
-    private LocalDateTime dataAlteracao;
     @Column(name = "COMPEC")
     private Double comissaoPecas;
     @Column(name = "COMMOB")
@@ -55,6 +49,7 @@ public class Funcionario {
     private String documento;
     @Column(name = "ENDFUN", length = 50)
     private String endereco;
+    @Column(name = "BAIFUN", length = 25)
     private String bairro;
     @Column(name = "CEPFUN", length = 8)
     private String cep;
@@ -66,5 +61,9 @@ public class Funcionario {
     private String fone;
     @Column(name = "CELFUN", length = 12)
     private String celular;
+    @Column(name = "DATCAD", nullable = false)
+    private LocalDateTime dataCadastro;
+    @Column(name = "DATAUT", nullable = false)
+    private LocalDateTime dataAlteracao;
 
 }

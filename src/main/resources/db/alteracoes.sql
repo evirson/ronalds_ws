@@ -58,6 +58,7 @@ create generator gt_cadsrv_codsrv;
 create generator gt_srvitn_coditn;
 create generator gt_estados_codest;
 create generator gt_pais_codpai;
+create generator gt_cadfab_codfab;
 
 
 alter table cademp alter column fonemp type varchar(12);

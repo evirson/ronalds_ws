@@ -10,7 +10,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/api/cadastros/funcionarios")
+@RequestMapping("/api/funcionarios")
 public class FuncionarioController {
 
     private final FuncionarioService service;

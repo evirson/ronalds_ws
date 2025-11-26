@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 
 @RestController
-@RequestMapping("/api/movimentos/ordens-servico")
+@RequestMapping("/api/ordem-servico")
 @Tag(name = "Ordem de Serviço", description = "Endpoints para gerenciamento de Ordens de Serviço")
 public class OrdemServicoController {
 
