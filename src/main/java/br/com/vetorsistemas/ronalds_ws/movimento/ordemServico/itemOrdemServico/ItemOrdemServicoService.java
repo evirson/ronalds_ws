@@ -4,6 +4,7 @@ import br.com.vetorsistemas.ronalds_ws.cadastro.produto.Produto;
 import br.com.vetorsistemas.ronalds_ws.cadastro.produto.ProdutoRepository;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.dto.ItemOrdemServicoCreateUpdateDTO;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.dto.ItemOrdemServicoDTO;
+import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.dto.ItemOrdemServicoTotaisDTO;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.mapper.ItemOrdemServicoMapper;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.ordemServico.OrdemServico;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.ordemServico.OrdemServicoRepository;
@@ -100,6 +101,29 @@ public class ItemOrdemServicoService {
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Item da Ordem de Serviço não encontrado"));
 
         return mapper.toDTO(entity);
+    }
+
+    @Transactional(readOnly = true)
+    public ItemOrdemServicoTotaisDTO getTotaisByOrdemServico(Integer codigoOrdemServico) {
+        Object[] result = entityManager.createQuery(
+                "SELECT COUNT(i), " +
+                "COALESCE(SUM(i.quantidade), 0), " +
+                "COALESCE(SUM(i.valorBruto), 0), " +
+                "COALESCE(SUM(i.valorDesconto), 0), " +
+                "COALESCE(SUM(i.valorLiquido), 0) " +
+                "FROM ItemOrdemServico i " +
+                "WHERE i.codigoOrdemServico = :codigoOrdemServico", Object[].class)
+                .setParameter("codigoOrdemServico", codigoOrdemServico)
+                .getSingleResult();
+
+        return ItemOrdemServicoTotaisDTO.builder()
+                .codigoOrdemServico(codigoOrdemServico)
+                .quantidadeItens((Long) result[0])
+                .totalQuantidade((Double) result[1])
+                .totalBruto((Double) result[2])
+                .totalDesconto((Double) result[3])
+                .totalLiquido((Double) result[4])
+                .build();
     }
 
     @Transactional

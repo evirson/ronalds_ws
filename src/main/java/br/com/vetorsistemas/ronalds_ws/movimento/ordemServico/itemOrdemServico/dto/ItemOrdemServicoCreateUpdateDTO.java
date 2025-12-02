@@ -13,7 +13,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class ItemOrdemServicoCreateUpdateDTO {
 
-    @NotNull
+    // Se id for null = inserção, se id tiver valor = alteração
+    private Integer id;
+
     private Integer codigoOrdemServico;
 
     @NotNull

@@ -1,6 +1,9 @@
 package br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.ordemServico;
 
+import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.ItemOrdemServico;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.ItemOrdemServicoRepository;
+import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.dto.ItemOrdemServicoCreateUpdateDTO;
+import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.mapper.ItemOrdemServicoMapper;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.ordemServico.dto.OrdemServicoCreateUpdateDTO;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.ordemServico.dto.OrdemServicoDTO;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.ordemServico.mapper.OrdemServicoMapper;
@@ -29,15 +32,18 @@ public class OrdemServicoService {
     private final OrdemServicoMapper mapper;
     private final EntityManager entityManager;
     private final ItemOrdemServicoRepository itemOrdemServicoRepository;
+    private final ItemOrdemServicoMapper itemMapper;
 
     public OrdemServicoService(OrdemServicoRepository repository,
                                OrdemServicoMapper mapper,
                                EntityManager entityManager,
-                               ItemOrdemServicoRepository itemOrdemServicoRepository) {
+                               ItemOrdemServicoRepository itemOrdemServicoRepository,
+                               ItemOrdemServicoMapper itemMapper) {
         this.repository = repository;
         this.mapper = mapper;
         this.entityManager = entityManager;
         this.itemOrdemServicoRepository = itemOrdemServicoRepository;
+        this.itemMapper = itemMapper;
     }
 
     @Transactional(readOnly = true)
@@ -72,7 +78,7 @@ public class OrdemServicoService {
         // Filtro por placa do veículo
         if (placa != null && !placa.trim().isEmpty()) {
             Join<Object, Object> veiculoJoin = (Join<Object, Object>) root.fetch("veiculo", JoinType.LEFT);
-            predicates.add(cb.like(cb.upper(veiculoJoin.get("placa")), "%" + placa.trim().toUpperCase() + "%"));
+            predicates.add(cb.equal(cb.upper(veiculoJoin.get("placa")), placa.trim().toUpperCase() ));
         }
 
         // Filtro por período de data de emissão
@@ -108,6 +114,8 @@ public class OrdemServicoService {
                 "%" + numeroNotaFiscalProduto.trim().toUpperCase() + "%"));
         }
 
+        if (faturamento == null){ faturamento = "N"; }
+
         if (faturamento.equals("S") || faturamento.equals("N")) {
             predicates.add(cb.equal(root.get("faturamento"), faturamento));
 
@@ -131,7 +139,7 @@ public class OrdemServicoService {
         }
         if (placa != null && !placa.trim().isEmpty()) {
             Join<Object, Object> veiculoJoin = countRoot.join("veiculo", JoinType.LEFT);
-            countPredicates.add(cb.like(cb.upper(veiculoJoin.get("placa")), "%" + placa.trim().toUpperCase() + "%"));
+            countPredicates.add(cb.equal(cb.upper(veiculoJoin.get("placa")), placa.trim().toUpperCase()));
         }
         if (dataInicial != null) {
             LocalDateTime dataInicialDateTime = dataInicial.atStartOfDay();
@@ -197,6 +205,10 @@ public class OrdemServicoService {
         validarOrdemServico(dto);
         OrdemServico entity = mapper.fromCreateUpdateDTO(dto);
         OrdemServico saved = repository.save(entity);
+
+        // Processar itens se existirem
+        processarItens(saved.getId(), dto.getItens());
+
         return findById(saved.getId());
     }
 
@@ -210,7 +222,40 @@ public class OrdemServicoService {
         mapper.updateEntityFromDTO(dto, entity);
         repository.save(entity);
 
+        // Processar itens se existirem
+        processarItens(id, dto.getItens());
+
         return findById(id);
+    }
+
+    /**
+     * Processa os itens da ordem de serviço.
+     * - Item com id = null: inserção
+     * - Item com id preenchido: alteração
+     */
+    private void processarItens(Integer codigoOrdemServico, List<ItemOrdemServicoCreateUpdateDTO> itens) {
+        if (itens == null || itens.isEmpty()) {
+            return;
+        }
+
+        for (ItemOrdemServicoCreateUpdateDTO itemDTO : itens) {
+            // Define o código da ordem de serviço no item
+            itemDTO.setCodigoOrdemServico(codigoOrdemServico);
+
+            if (itemDTO.getId() == null) {
+                // Inserção: criar novo item
+                ItemOrdemServico novoItem = itemMapper.fromCreateUpdateDTO(itemDTO);
+                itemOrdemServicoRepository.save(novoItem);
+            } else {
+                // Alteração: buscar item existente e atualizar
+                ItemOrdemServico itemExistente = itemOrdemServicoRepository.findById(itemDTO.getId())
+                        .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND,
+                                "Item da Ordem de Serviço não encontrado: " + itemDTO.getId()));
+
+                itemMapper.updateEntityFromDTO(itemDTO, itemExistente);
+                itemOrdemServicoRepository.save(itemExistente);
+            }
+        }
     }
 
     @Transactional

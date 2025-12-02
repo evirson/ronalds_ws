@@ -42,6 +42,11 @@ public class ProdutoMapper {
 
     public Produto fromDTO(ProdutoDto d) {
         if (d == null) return null;
+
+        if (d.getQuantidadePadrao() == 0.00) {
+            d.setQuantidadePadrao(1.00);
+        }
+
         return Produto.builder()
                 .id(d.getId())
                 .tipoProduto(d.getTipoProduto())

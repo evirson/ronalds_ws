@@ -1,5 +1,6 @@
 package br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.ordemServico.dto;
 
+import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.dto.ItemOrdemServicoCreateUpdateDTO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -9,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -86,4 +88,7 @@ public class OrdemServicoCreateUpdateDTO {
     private Double pecaParalelaDesconto;
     private Double pecaParalelaLiquida;
     private Double totalDeslocamento;
+
+    // Lista de itens da ordem de serviço (produtos/serviços)
+    private List<ItemOrdemServicoCreateUpdateDTO> itens;
 }

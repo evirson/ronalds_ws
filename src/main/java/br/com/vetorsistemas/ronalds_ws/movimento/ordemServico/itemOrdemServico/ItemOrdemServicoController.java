@@ -2,6 +2,7 @@ package br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico;
 
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.dto.ItemOrdemServicoCreateUpdateDTO;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.dto.ItemOrdemServicoDTO;
+import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.dto.ItemOrdemServicoTotaisDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -39,6 +40,12 @@ public class ItemOrdemServicoController {
     @GetMapping("/ordem-servico/{codigoOrdemServico}")
     public ResponseEntity<List<ItemOrdemServicoDTO>> listByOrdemServico(@PathVariable Integer codigoOrdemServico) {
         return ResponseEntity.ok(service.findByOrdemServico(codigoOrdemServico));
+    }
+
+    @GetMapping("/ordem-servico/{codigoOrdemServico}/totais")
+    @Operation(summary = "Retorna os totais dos itens de uma Ordem de Serviço")
+    public ResponseEntity<ItemOrdemServicoTotaisDTO> getTotaisByOrdemServico(@PathVariable Integer codigoOrdemServico) {
+        return ResponseEntity.ok(service.getTotaisByOrdemServico(codigoOrdemServico));
     }
 
     @GetMapping("/{id}")
