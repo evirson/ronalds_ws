@@ -87,3 +87,5 @@ alter table cadpro drop claori;
 alter table cadpro drop clatri;
 alter table cadpro drop cusind;
 
+alter table srvitn alter despro type varchar(80);
+

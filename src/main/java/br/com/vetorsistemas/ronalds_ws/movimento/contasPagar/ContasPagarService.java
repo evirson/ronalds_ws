@@ -12,6 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ContasPagarService {
 
@@ -23,50 +29,62 @@ public class ContasPagarService {
         this.mapper = mapper;
     }
 
-    public Page<ContasPagarDto> search(String razaoSocial,
-                                      String nomeFantasia,
-                                      String cnpj,
-                                      String telefone,
-                                      Integer pagina,
-                                      Integer tamanhoPagina ) {
+    @Transactional(readOnly = true)
+    public Page<ContasPagarDto> search(Integer idFornecedor,
+                                       String documento,
+                                       String descricao,
+                                       LocalDate dataVencimentoInicio,
+                                       LocalDate dataVencimentoFim,
+                                       Boolean apenasPendentes,
+                                       Integer pagina,
+                                       Integer tamanhoPagina) {
+
+        if (pagina == null || pagina < 0) pagina = 0;
+        if (tamanhoPagina == null || tamanhoPagina <= 0) tamanhoPagina = 10;
 
         Specification<ContasPagar> specs = (root, query, cb) -> cb.conjunction();
 
-        if (cnpj != null){
-            specs = specs.and((root, query, cb) -> cb.equal(root.get("cnpj"), cnpj));
+        if (idFornecedor != null) {
+            specs = specs.and((root, query, cb) -> cb.equal(root.get("idFornecedor"), idFornecedor));
         }
 
-        if (razaoSocial != null){
-            specs = specs.and((root, query, cb) -> cb.like(root.get("razaoSocial"), "%" + razaoSocial.toUpperCase() +"%"));
-
+        if (documento != null && !documento.trim().isEmpty()) {
+            String doc = documento.trim().toUpperCase();
+            specs = specs.and((root, query, cb) -> cb.like(cb.upper(root.get("documento")), "%" + doc + "%"));
         }
 
-        if (nomeFantasia != null){
-            specs = specs.and((root, query, cb) -> cb.like(root.get("nomeFantasia"), "%" + nomeFantasia.toUpperCase() +"%"));
-
+        if (descricao != null && !descricao.trim().isEmpty()) {
+            String desc = descricao.trim().toUpperCase();
+            specs = specs.and((root, query, cb) -> cb.like(cb.upper(root.get("descricao")), "%" + desc + "%"));
         }
 
-        if (telefone != null){
-            specs = specs.and((root, query, cb) -> cb.equal(root.get("fone"),  telefone));
-
+        if (dataVencimentoInicio != null) {
+            LocalDateTime inicio = dataVencimentoInicio.atStartOfDay();
+            specs = specs.and((root, query, cb) -> cb.greaterThanOrEqualTo(root.get("dataVencimento"), inicio));
         }
 
-        Sort sort = Sort.by( "razaoSocial").ascending();
+        if (dataVencimentoFim != null) {
+            LocalDateTime fim = dataVencimentoFim.atTime(LocalTime.MAX);
+            specs = specs.and((root, query, cb) -> cb.lessThanOrEqualTo(root.get("dataVencimento"), fim));
+        }
 
+        if (apenasPendentes != null && apenasPendentes) {
+            specs = specs.and((root, query, cb) -> cb.or(
+                    cb.isNull(root.get("valorPago")),
+                    cb.equal(root.get("valorPago"), 0.0)
+            ));
+        }
+
+        Sort sort = Sort.by("dataVencimento").ascending();
         Pageable pageRequest = PageRequest.of(pagina, tamanhoPagina, sort);
 
-        Page<ContasPagar> pageResult = repository.findAll(specs, pageRequest);
-
-        Page<ContasPagarDto> resultado = pageResult.map(mapper::toDto);
-
-        return resultado;
-
+        return repository.findAll(specs, pageRequest).map(mapper::toDto);
     }
 
 
     public ContasPagarDto findById(Integer id) {
         ContasPagar entity = repository.findById(id)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "ContasPagar nãoo encontrado"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "ContasPagar não encontrado"));
         return mapper.toDto(entity);
     }
 
@@ -86,13 +104,28 @@ public class ContasPagarService {
         return mapper.toDto(repository.save(entity));
     }
 
+    @Transactional
     public void delete(Integer id) {
         if (!repository.existsById(id)) {
-            throw new AppException(HttpStatus.NOT_FOUND, "ContasPagar n\u00e3o encontrado");
+            throw new AppException(HttpStatus.NOT_FOUND, "ContasPagar não encontrado");
         }
         repository.deleteById(id);
     }
 
+    @Transactional
+    public List<ContasPagarDto> createLote(List<ContasPagarDto> dtos) {
+        if (dtos == null || dtos.isEmpty()) {
+            throw new AppException(HttpStatus.BAD_REQUEST, "Lista de contas a pagar não pode ser vazia");
+        }
 
-    
+        List<ContasPagar> entities = dtos.stream()
+                .map(mapper::toEntity)
+                .collect(Collectors.toList());
+
+        List<ContasPagar> saved = repository.saveAll(entities);
+
+        return saved.stream()
+                .map(mapper::toDto)
+                .collect(Collectors.toList());
+    }
 }

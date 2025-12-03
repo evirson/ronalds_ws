@@ -24,7 +24,7 @@ public class ItemOrdemServicoCreateUpdateDTO {
     @Size(max = 1)
     private String tipoProduto;
 
-    @Size(max = 50)
+    @Size(max = 80)
     private String descricaoProduto;
 
     private Double quantidade;

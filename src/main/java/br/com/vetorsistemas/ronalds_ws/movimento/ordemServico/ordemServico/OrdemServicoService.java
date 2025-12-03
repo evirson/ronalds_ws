@@ -2,7 +2,9 @@ package br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.ordemServico;
 
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.ItemOrdemServico;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.ItemOrdemServicoRepository;
+import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.ItemOrdemServicoService;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.dto.ItemOrdemServicoCreateUpdateDTO;
+import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.dto.ItemOrdemServicoTotaisDTO;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.itemOrdemServico.mapper.ItemOrdemServicoMapper;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.ordemServico.dto.OrdemServicoCreateUpdateDTO;
 import br.com.vetorsistemas.ronalds_ws.movimento.ordemServico.ordemServico.dto.OrdemServicoDTO;
@@ -34,16 +36,20 @@ public class OrdemServicoService {
     private final ItemOrdemServicoRepository itemOrdemServicoRepository;
     private final ItemOrdemServicoMapper itemMapper;
 
+    private final ItemOrdemServicoService itemOrdemServicoService;
+
     public OrdemServicoService(OrdemServicoRepository repository,
                                OrdemServicoMapper mapper,
                                EntityManager entityManager,
                                ItemOrdemServicoRepository itemOrdemServicoRepository,
-                               ItemOrdemServicoMapper itemMapper) {
+                               ItemOrdemServicoMapper itemMapper,
+                               ItemOrdemServicoService itemOrdemServicoService) {
         this.repository = repository;
         this.mapper = mapper;
         this.entityManager = entityManager;
         this.itemOrdemServicoRepository = itemOrdemServicoRepository;
         this.itemMapper = itemMapper;
+        this.itemOrdemServicoService = itemOrdemServicoService;
     }
 
     @Transactional(readOnly = true)
@@ -204,10 +210,9 @@ public class OrdemServicoService {
     public OrdemServicoDTO create(OrdemServicoCreateUpdateDTO dto) {
         validarOrdemServico(dto);
         OrdemServico entity = mapper.fromCreateUpdateDTO(dto);
+
         OrdemServico saved = repository.save(entity);
 
-        // Processar itens se existirem
-        processarItens(saved.getId(), dto.getItens());
 
         return findById(saved.getId());
     }
@@ -220,20 +225,21 @@ public class OrdemServicoService {
                 .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Ordem de Serviço não encontrada"));
 
         mapper.updateEntityFromDTO(dto, entity);
+
+        ItemOrdemServicoTotaisDTO totaisDTO = itemOrdemServicoService.getTotaisByOrdemServico(entity.getId());
+
+        entity.setTotalBruto(totaisDTO.getTotalBruto());
+        entity.setValorDesconto(totaisDTO.getTotalDesconto());
+        entity.setTotalLiquido(totaisDTO.getTotalLiquido());
+
         repository.save(entity);
 
-        // Processar itens se existirem
-        processarItens(id, dto.getItens());
 
         return findById(id);
     }
 
-    /**
-     * Processa os itens da ordem de serviço.
-     * - Item com id = null: inserção
-     * - Item com id preenchido: alteração
-     */
     private void processarItens(Integer codigoOrdemServico, List<ItemOrdemServicoCreateUpdateDTO> itens) {
+
         if (itens == null || itens.isEmpty()) {
             return;
         }

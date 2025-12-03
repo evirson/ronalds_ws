@@ -19,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,6 +92,13 @@ public class ItemOrdemServicoService {
 
     @Transactional(readOnly = true)
     public ItemOrdemServicoDTO findById(Integer id) {
+
+        System.out.println(id.toString());
+
+        if (id == null){
+            return null;
+        }
+
         ItemOrdemServico entity = entityManager.createQuery(
                 "SELECT i FROM ItemOrdemServico i " +
                 "LEFT JOIN FETCH i.produto " +
@@ -98,7 +106,7 @@ public class ItemOrdemServicoService {
                 .setParameter("id", id)
                 .getResultStream()
                 .findFirst()
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Item da Ordem de Serviço não encontrado"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "pesquisando... Item da Ordem de Serviço não encontrado"));
 
         return mapper.toDTO(entity);
     }
@@ -146,6 +154,7 @@ public class ItemOrdemServicoService {
         calcularValores(dto);
 
         ItemOrdemServico entity = mapper.fromCreateUpdateDTO(dto);
+
         ItemOrdemServico saved = repository.save(entity);
         return findById(saved.getId());
     }
@@ -155,7 +164,7 @@ public class ItemOrdemServicoService {
         validarItem(dto);
 
         ItemOrdemServico entity = repository.findById(id)
-                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "Item da Ordem de Serviço não encontrado"));
+                .orElseThrow(() -> new AppException(HttpStatus.NOT_FOUND, "atualizando... Item da Ordem de Serviço não encontrado"));
 
         // Se o tipo de produto for 2 (Serviço) ou 4 (Geometria), a descrição é alterável
         // Caso contrário, busca a descrição do cadastro de produtos
@@ -181,7 +190,7 @@ public class ItemOrdemServicoService {
     @Transactional
     public void delete(Integer id) {
         if (!repository.existsById(id)) {
-            throw new AppException(HttpStatus.NOT_FOUND, "Item da Ordem de Serviço não encontrado");
+            throw new AppException(HttpStatus.NOT_FOUND, "apagando... Item da Ordem de Serviço não encontrado");
         }
         repository.deleteById(id);
     }

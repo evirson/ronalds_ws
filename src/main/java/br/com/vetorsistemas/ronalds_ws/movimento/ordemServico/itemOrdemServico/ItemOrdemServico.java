@@ -37,7 +37,7 @@ public class ItemOrdemServico {
     @Column(name = "TIPPRO", length = 1, nullable = false)
     private String tipoProduto;
 
-    @Column(name = "DESPRO", length = 50, nullable = false)
+    @Column(name = "DESPRO", length = 80, nullable = false)
     private String descricaoProduto;
 
     @Column(name = "QTDPRO")

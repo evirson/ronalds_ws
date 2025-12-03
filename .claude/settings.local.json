@@ -11,7 +11,8 @@
       "Bash(powershell:*)",
       "Bash(taskkill:*)",
       "Bash(netstat:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(xargs:*)"
     ],
     "deny": [],
     "ask": []

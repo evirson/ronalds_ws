@@ -44,6 +44,7 @@ public class ContasPagarMapper {
 
         ContasPagarDto dto = new ContasPagarDto();
 
+        dto.setId(ent.getId());
         dto.setCodigoPedido(ent.getCodigoPedido());
         dto.setDataMovimento(ent.getDataMovimento());
         dto.setPlanoContas(ent.getPlanoContas());
